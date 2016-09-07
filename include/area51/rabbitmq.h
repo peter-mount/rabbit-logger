@@ -66,6 +66,17 @@ extern "C" {
 
     extern void *rabbitmq_getUserData(RabbitConsumer *);
     extern void rabbitmq_setUserData(RabbitConsumer *, void *, void (*)(void *));
+
+    extern void rabbitmq_setAck(RabbitConsumer *, void (*)(RabbitConsumer *, amqp_envelope_t *));
+
+    extern void rabbitmq_setRet(RabbitConsumer *, void (*)(RabbitConsumer *, amqp_message_t *));
+
+    extern void rabbitmq_setMessage(RabbitConsumer *, void (*)(RabbitConsumer *, amqp_envelope_t *));
+
+    extern void rabbitmq_setChanClose(RabbitConsumer *, void (*)(RabbitConsumer *));
+
+    extern void rabbitmq_setConClose(RabbitConsumer *, void (*)(RabbitConsumer *));
+
 #ifdef __cplusplus
 }
 #endif

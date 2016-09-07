@@ -42,10 +42,12 @@ extern "C" {
         pthread_t thread;
         // The consumer
         void (*consumer)(RabbitConsumer *);
+        // Message consumer
+        void (*msg)(RabbitConsumer *,amqp_envelope_t *);
         // Acknowledge
-        void (*ack)(amqp_envelope_t *);
+        void (*ack)(RabbitConsumer *,amqp_envelope_t *);
         // Return
-        void (*ret)(amqp_message_t *);
+        void (*ret)(RabbitConsumer *,amqp_message_t *);
         // channel close
         void (*chanClose)(RabbitConsumer *);
         // connection close

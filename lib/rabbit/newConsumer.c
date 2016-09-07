@@ -36,7 +36,7 @@ static void consumer(RabbitConsumer *con) {
                              */
                         case AMQP_BASIC_ACK_METHOD:
                             if (con->ack)
-                                con->ack(&envelope);
+                                con->ack(con, &envelope);
                             break;
 
                             /* if a published message couldn't be routed and the mandatory flag was set
@@ -51,7 +51,7 @@ static void consumer(RabbitConsumer *con) {
                             }
 
                             if (con->ret)
-                                con->ret(&message);
+                                con->ret(con, &message);
 
                             amqp_destroy_message(&message);
                         }
@@ -87,6 +87,8 @@ static void consumer(RabbitConsumer *con) {
             }
 
         } else {
+            if (con->msg)
+                con->msg(con, &envelope);
             amqp_destroy_envelope(&envelope);
         }
 
@@ -134,7 +136,7 @@ RabbitConsumer *rabbitmq_newConsumer(
     if (main && json_object_object_get_ex(cfg, "logging", &logging))
         statistic_recorder(main, &con->stats, logging);
 
-    logconsole("Consumer %d exchange=\"%s\" bindingKey=\"%s\"", con->consumerId, con->exchange, con->bindingkey);
+    //logconsole("Consumer %d exchange=\"%s\" bindingKey=\"%s\"", con->consumerId, con->exchange, con->bindingkey);
 
     if (config)
         config(mq, con, cfg, c);
@@ -151,4 +153,29 @@ void *rabbitmq_getUserData(RabbitConsumer *c) {
 void rabbitmq_setUserData(RabbitConsumer *c, void *v, void (*f)(void *)) {
     if (c)
         c->userdata = freeable_set(c->userdata, v, f);
+}
+
+void rabbitmq_setMessage(RabbitConsumer *c, void (*t)(RabbitConsumer *, amqp_envelope_t *)) {
+    if (c)
+        c->msg = t;
+}
+
+void rabbitmq_setAck(RabbitConsumer *c, void (*t)(RabbitConsumer *, amqp_envelope_t *)) {
+    if (c)
+        c->ack = t;
+}
+
+void rabbitmq_setRet(RabbitConsumer *c, void (*t)(RabbitConsumer *, amqp_message_t *)) {
+    if (c)
+        c->ret = t;
+}
+
+void rabbitmq_setChanClose(RabbitConsumer *c, void (*t)(RabbitConsumer *)) {
+    if (c)
+        c->chanClose = t;
+}
+
+void rabbitmq_setConClose(RabbitConsumer *c, void (*t)(RabbitConsumer *)) {
+    if (c)
+        c->conClose = t;
 }
