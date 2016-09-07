@@ -21,7 +21,7 @@ CCFLAGS="$CCFLAGS -fPIC"
 
 # Final list of libraries required in the correct sequence.
 
-LDFLAGS="$LDFLAGS -larea51 -ljson-c -lcurl"
+LDFLAGS="$LDFLAGS -lrabbitmq -larea51 -ljson-c -lcurl"
 
 # Our core library (i.e. under lib)
 LDFLAGS="-lrabbit-logger $LDFLAGS"

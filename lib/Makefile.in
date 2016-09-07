@@ -2,4 +2,9 @@ MODULE = rabbit-logger
 
 OBJS  = config.o
 
+OBJS += rabbit/amqpError.o \
+	rabbit/connect.o \
+	rabbit/new.o \
+	rabbit/newConsumer.o
+
 include ../SubMakefile

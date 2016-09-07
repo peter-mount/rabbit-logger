@@ -9,8 +9,8 @@ url="https://area51.onl/"
 license="ASL 2.0"
 source=""
 subpackages="$pkgname-dev"
-depends="libarea51 json-c curl"
-depends_dev="libarea51-dev json-c-dev curl-dev"
+depends="librabbitmq libarea51 json-c curl"
+depends_dev="librabbitmq-dev libarea51-dev json-c-dev curl-dev"
 #triggers="$pkgname-bin.trigger=/lib:/usr/lib:/usr/glibc-compat/lib"
 
 builddeps() {
